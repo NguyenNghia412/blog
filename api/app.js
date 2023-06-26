@@ -37,10 +37,10 @@ app.use(passport.initialize());
 
 // route
 app.use(routes.healthRoutes);
-app.use('api', routes.blogRoutes);
-app.use('api', routes.categoryRoutes);
-app.use('api', routes.userRoutes);
-app.use('api', routes.fileRoutes);
+app.use('/api/', routes.blogRoutes);
+app.use('/api/', routes.categoryRoutes);
+app.use('/api/', routes.userRoutes);
+app.use('/api/', routes.fileRoutes);
 
 // index
 app.get('/', (req, res) => {
