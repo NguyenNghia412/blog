@@ -27,6 +27,9 @@ mongoose.connect(connectionString).then(res => {
     console.error('connect mongodb error: ', err);
 })
 
+// serve static file
+app.use(express.static('public'))
+
 // passport
 passport.use(passportLocal);
 passport.use(jwtPassport);
@@ -34,9 +37,10 @@ app.use(passport.initialize());
 
 // route
 app.use(routes.healthRoutes);
-app.use(routes.blogRoutes);
-app.use(routes.categoryRoutes);
-app.use(routes.userRoutes);
+app.use('api', routes.blogRoutes);
+app.use('api', routes.categoryRoutes);
+app.use('api', routes.userRoutes);
+app.use('api', routes.fileRoutes);
 
 // index
 app.get('/', (req, res) => {
