@@ -12,3 +12,7 @@ services:
     image: mongo:latest
     ports:
       - "3456:27017"
+    volumes:
+      - type: volume
+        source: /app/blog/data
+        target: /data/db
