@@ -1,3 +1,4 @@
+const { default: slugify } = require("slugify");
 const Blog = require("../models/blog.model")
 
 /**
@@ -7,11 +8,15 @@ const Blog = require("../models/blog.model")
  * @returns 
  */
 const createBlog = async ({ title, content, summary, category, thumbnail, tags }, { userId, username, displayName }) => {
+    
+    const slug = await genSlug(title);
+
     const blog = await Blog.create({
         title,
         content,
         summary,
         thumbnail,
+        slug,
         tags,
         category,
         author: {
@@ -76,6 +81,16 @@ const getBlog = async ({ blogId }) => {
 }
 
 /**
+ * GET 1 BLOG BY SLUG
+ * @param {*} param0 
+ * @returns 
+ */
+const getBlogBySlug = async ({ slug }) => {
+    const data = await Blog.findOne({ slug, deleted: false }).exec();
+    return data.toObject();
+}
+
+/**
  * CẬP NHẬT BLOG
  * @param {*} param0 
  * @returns 
@@ -106,10 +121,41 @@ const deleteBlog = async({ id }) => {
     return blog;
 }
 
+/**
+ * SINH SLUG
+ * @param {*} slug 
+ * @returns 
+ */
+const genSlug = async (title = '') => {
+    const slug = slugify(title, {
+        locale: 'vi',      // language code of the locale to use
+        trim: true,
+        lower: true,        // trim leading and trailing replacement chars, defaults to `true`
+    });
+    let finalSlug = slug;
+    let blogBySlug = await Blog.findOne({ slug }).exec();
+
+    while (blogBySlug !== null) {
+        let arr = blogBySlug.slug.split('_');
+        let num = arr.pop() * 1;
+
+        if (num) {
+            finalSlug = `${slug}_${++num}`;    
+        } else {
+            finalSlug = `${slug}_1`;    
+        }
+        
+        blogBySlug = await Blog.findOne({ slug: finalSlug }).exec();
+    }
+
+    return finalSlug;
+}
+
 module.exports = {
     createBlog,
     updateBlog,
     getPagingBlog,
     getBlog,
+    getBlogBySlug,
     deleteBlog,
 }

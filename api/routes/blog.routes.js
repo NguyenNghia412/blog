@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport');
-const { createBlog, getPagingBlog, updateBlog, getBlog, deleteBlog } = require('../controllers/blog.controller');
+const { createBlog, getPagingBlog, updateBlog, getBlog, deleteBlog, getBlogBySlug } = require('../controllers/blog.controller');
 const { queryPagingValidateSchema } = require('../middleware/validation/base/queryPaging.validate');
 const { validate } = require('../middleware/validation/error.validate');
 const { updateBlogValidateSchema } = require('../middleware/validation/blog/updateBlog.validate.');
@@ -19,6 +19,7 @@ router.delete('/blog/:blogId', passport.authenticate('jwt', {
 router.get('/blog/:blogId', passport.authenticate('jwt', {
     session: false,
 }), getBlog);
+router.get('/blog/slug/:slug', getBlogBySlug);
 router.get('/blog', queryPagingValidateSchema, validate, passport.authenticate('jwt', {
     session: false,
 }), getPagingBlog);

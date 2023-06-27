@@ -61,6 +61,21 @@ const getBlog = async (req, res, next) => {
 }
 
 /**
+ * GET 1 BLOG
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+const getBlogBySlug = async (req, res, next) => {
+    try {
+        const data = await blogServices.getBlogBySlug(req.params);
+        res.status(200).json(data);
+    } catch (error) {
+        next(error);
+    }
+}
+
+/**
  * XOÁ MỀM BLOG
  * @param {*} req 
  * @param {*} res 
@@ -80,6 +95,7 @@ module.exports = {
     createBlog,
     getPagingBlog,
     getBlog,
+    getBlogBySlug,
     updateBlog,
     deleteBlog,
 }
