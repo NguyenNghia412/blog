@@ -8,11 +8,11 @@ services:
     volumes:
       - ./api:/app
       - /app/node_modules
+      - /app/blog/public:/app/public
   db:
     image: mongo:latest
+    container_name: blog-db-c
     ports:
       - "3456:27017"
     volumes:
-      - type: volume
-        source: /app/blog/data
-        target: /data/db
+      - /app/blog/data:/data/db
